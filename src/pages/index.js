@@ -15,11 +15,13 @@ const IndexPage = () => {
     <Layout>
       <SEO description="The MadHatter store homepage" title="Homepage" />
       <HomepageCollectionsGrid
-        collections={collections.filter(
-          collection => collection.title !== 'Featured Hats'
-        )}
+        collections={
+          collections?.filter(
+            collection => collection.title !== 'Featured Hats'
+          ) || []
+        }
       />
-      {!!collections.find(
+      {!!collections?.find(
         collection => collection.title === 'Featured Hats'
       ) && <FeaturedProducts />}
     </Layout>

@@ -3,10 +3,10 @@ import { CollectionTile } from '../CollectionTile';
 import { RemainingCollections } from './styles';
 
 export function HomepageCollectionsGrid({ collections }) {
-  const saleCollection = collections.find(
+  const saleCollection = collections?.find(
     collection => collection.title === 'SALE'
   );
-  const remainingCollections = collections.filter(
+  const remainingCollections = collections?.filter(
     collection => collection.title !== 'SALE'
   );
 
@@ -24,7 +24,7 @@ export function HomepageCollectionsGrid({ collections }) {
         />
       )}
       <RemainingCollections>
-        {remainingCollections.map(collection => (
+        {remainingCollections?.map(collection => (
           <CollectionTile
             destination={`/all-products?c=${encodeURIComponent(
               collection.shopifyId

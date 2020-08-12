@@ -26,7 +26,7 @@ export default function AllProducts() {
   });
 
   if (collections) {
-    collections.forEach(collection => {
+    collections?.forEach(collection => {
       collectionProductMap[collection.shopifyId] = {};
 
       collection.products.forEach(product => {
