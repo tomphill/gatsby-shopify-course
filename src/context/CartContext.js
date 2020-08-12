@@ -15,7 +15,9 @@ export default CartContext;
 
 export function CartContextProvider({ children }) {
   const [checkout, setCheckout] = useState(
-    JSON.parse(localStorage.getItem('checkout'))
+    JSON.parse(
+      typeof window !== 'undefined' ? localStorage.getItem('checkout') : null
+    )
   );
 
   const [successfulOrder, setSuccessfulOrder] = useState(null);
@@ -23,7 +25,7 @@ export function CartContextProvider({ children }) {
 
   React.useEffect(() => {
     const getCheckout = async () => {
-      if (checkoutId) {
+      if (checkoutId && typeof window !== 'undefined') {
         const fetchedCheckout = await client.checkout.fetch(checkoutId);
         if (fetchedCheckout.completedAt) {
           localStorage.removeItem('checkout');
@@ -79,7 +81,9 @@ export function CartContextProvider({ children }) {
 
     setCheckout(newCheckout);
     setSuccessfulOrder(null);
-    localStorage.setItem('checkout', JSON.stringify(newCheckout));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('checkout', JSON.stringify(newCheckout));
+    }
   };
 
   const removeLineItem = async lineItemId => {
