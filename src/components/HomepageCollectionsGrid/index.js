@@ -12,17 +12,21 @@ export function HomepageCollectionsGrid({ collections }) {
 
   return (
     <div>
-      {!!saleCollection && (
-        <CollectionTile
-          sale
-          destination={`/all-products?c=${encodeURIComponent(
-            saleCollection.shopifyId
-          )}`}
-          title={saleCollection.title}
-          description={saleCollection.description}
-          backgroundImage={saleCollection.image.localFile.childImageSharp.fluid}
-        />
-      )}
+      <div>
+        {!!saleCollection && (
+          <CollectionTile
+            sale
+            destination={`/all-products?c=${encodeURIComponent(
+              saleCollection.shopifyId
+            )}`}
+            title={saleCollection.title}
+            description={saleCollection.description}
+            backgroundImage={
+              saleCollection.image.localFile.childImageSharp.fluid
+            }
+          />
+        )}
+      </div>
       <RemainingCollections>
         {remainingCollections?.map(collection => (
           <CollectionTile
