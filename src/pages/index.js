@@ -9,19 +9,18 @@ import ProductContext from 'context/ProductContext';
 
 const IndexPage = () => {
   const { collections } = React.useContext(ProductContext);
-  console.log(collections);
 
   return (
     <Layout>
       <SEO description="The MadHatter store homepage" title="Homepage" />
       <HomepageCollectionsGrid
         collections={
-          collections?.filter(
+          collections.filter(
             collection => collection.title !== 'Featured Hats'
           ) || []
         }
       />
-      {!!collections?.find(
+      {!!collections.find(
         collection => collection.title === 'Featured Hats'
       ) && <FeaturedProducts />}
     </Layout>

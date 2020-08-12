@@ -35,8 +35,6 @@ export default function AllProducts() {
     });
   }
 
-  console.log(collectionProductMap);
-
   const filterByCategory = product => {
     if (Object.keys(selectedCollectionIdsMap).length) {
       for (let key in selectedCollectionIdsMap) {
@@ -80,7 +78,7 @@ export default function AllProducts() {
             <h3>
               <span>Oh no! Nothing matches</span>
               &nbsp;
-              <strong>'{searchTerm}''</strong>
+              <strong>'{searchTerm}'</strong>
             </h3>
             <div>
               To help with your search why not try:
