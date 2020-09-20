@@ -1,5 +1,5 @@
-import crypto from 'crypto';
-import faunadb from 'faunadb';
+const crypto = require('crypto');
+const faunadb = require('faunadb');
 
 const q = faunadb.query;
 const client = new faunadb.Client({
