@@ -1,11 +1,13 @@
-const crypto = require('crypto');
+import { POINT_CONVERSION_COMPRESSED } from 'constants';
+import crypto from 'crypto';
+import faunadb from 'faunadb';
 
-exports.handler = function (event, context, callback) {
-  console.log('--------------- BODY ---------------');
-  console.log(JSON.parse(event.body));
-  console.log('--------------- HEADERS ---------------');
-  console.log(event.headers);
+const q = faunadb.query;
+const client = new faunadb.Client({
+    secret: process.env.FAUNADB_SECRET
+})
 
+exports.handler = async = (event, context, callback) => {
   const hmac = event.headers['x-shopify-hmac-sha256'];
 
   const hash = crypto
@@ -20,6 +22,29 @@ exports.handler = function (event, context, callback) {
     callback(null, {
       statusCode: 200,
     });
+
+    // check against db
+    if (event.body) {
+      try {
+        console.log('--------------- BODY ---------------');
+        const body = JSON.parse(event.body);
+        console.log(body);
+        const { id } = body;
+        const result = await client.query(q.Get(q.Ref(q.Collection('products'), id)));
+        if(result){
+            console.log('result! ', result);
+        }else{
+            console.log('no result ', result);
+        }
+
+        const result1 = await client.query(q.Get(q.Ref(q.Collection('products'), 1)));
+        if(result1){
+            console.log('result1! ', result1);
+        }else{
+            console.log('no result1 ', result1);
+        }
+      } catch (e) {}
+    }
   } else {
     console.log('NO MATCH');
     // No match! This request didn't originate from Shopify
