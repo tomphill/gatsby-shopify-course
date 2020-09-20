@@ -6,7 +6,7 @@ const client = new faunadb.Client({
   secret: process.env.FAUNADB_SECRET,
 });
 
-exports.handler = async function (event, context, callback) {
+exports.handler = function (event, context, callback) {
   const hmac = event.headers['x-shopify-hmac-sha256'];
 
   const hash = crypto
@@ -29,23 +29,25 @@ exports.handler = async function (event, context, callback) {
         const body = JSON.parse(event.body);
         console.log(body);
         const { id } = body;
-        const result = await client.query(
-          q.Get(q.Ref(q.Collection('products'), id))
-        );
-        if (result) {
-          console.log('result! ', result);
-        } else {
-          console.log('no result ', result);
-        }
+        client
+          .query(q.Get(q.Ref(q.Collection('products'), id)))
+          .then(result => {
+            if (result) {
+              console.log('result! ', result);
+            } else {
+              console.log('no result ', result);
+            }
+          });
 
-        const result1 = await client.query(
-          q.Get(q.Ref(q.Collection('products'), 1))
-        );
-        if (result1) {
-          console.log('result1! ', result1);
-        } else {
-          console.log('no result1 ', result1);
-        }
+        client
+          .query(q.Get(q.Ref(q.Collection('products'), 1)))
+          .then(result1 => {
+            if (result1) {
+              console.log('result1! ', result1);
+            } else {
+              console.log('no result1 ', result1);
+            }
+          });
       } catch (e) {}
     }
   } else {
