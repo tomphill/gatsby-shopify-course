@@ -20,6 +20,7 @@
     "gatsby-source-filesystem": "^2.3.14",
     "gatsby-source-shopify": "^3.2.19",
     "gatsby-transformer-sharp": "^2.5.7",
+    "netlify-lambda": "^2.0.1",
     "prop-types": "^15.7.2",
     "query-string": "^6.13.1",
     "react": "^16.12.0",
