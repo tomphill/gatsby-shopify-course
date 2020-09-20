@@ -6,7 +6,7 @@ const client = new faunadb.Client({
   secret: process.env.FAUNADB_SECRET,
 });
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async function (event, context, callback) {
   const hmac = event.headers['x-shopify-hmac-sha256'];
 
   const hash = crypto
