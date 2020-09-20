@@ -30,6 +30,7 @@
     "styled-reset": "^4.2.0"
   },
   "devDependencies": {
+    "netlify-lambda": "^2.0.1",
     "prettier": "2.0.5"
   },
   "keywords": [
@@ -51,5 +52,13 @@
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
+  },
+  "proxy": {
+    "/.netlify/functions": {
+      "target": "http://localhost:9000",
+      "pathRewrite": {
+        "^/\\.netlify/functions": ""
+      }
+    }
   }
 }
