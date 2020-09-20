@@ -1,4 +1,3 @@
-import { POINT_CONVERSION_COMPRESSED } from 'constants';
 import crypto from 'crypto';
 import faunadb from 'faunadb';
 
