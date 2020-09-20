@@ -6,7 +6,7 @@ const client = new faunadb.Client({
   secret: process.env.FAUNADB_SECRET,
 });
 
-export async function handler(event, context, callback) {
+exports.handler = function (event, context, callback) {
   const hmac = event.headers['x-shopify-hmac-sha256'];
 
   const hash = crypto
@@ -18,9 +18,6 @@ export async function handler(event, context, callback) {
   if (hash === hmac) {
     // It's a match! All good
     console.log('MATCH');
-    callback(null, {
-      statusCode: 200,
-    });
 
     // check against db
     if (event.body) {
@@ -29,26 +26,26 @@ export async function handler(event, context, callback) {
         const body = JSON.parse(event.body);
         console.log(body);
         const { id } = body;
-        const result = await client.query(
-          q.Get(q.Ref(q.Collection('products'), id))
-        );
-        if (result) {
-          console.log('result! ', result);
-        } else {
-          console.log('no result ', result);
-        }
+        client
+          .query(q.Get(q.Ref(q.Collection('products'), id)))
+          .then(result => {
+            if (result) {
+              console.log('result! ', result);
+            } else {
+              console.log('no result ', result);
+            }
+          });
 
-        const result1 = await client.query(
-          q.Get(q.Ref(q.Collection('products'), 1))
-        );
-        if (result1) {
-          console.log('result1! ', result1);
-        } else {
-          console.log('no result1 ', result1);
-        }
-      } catch (e) {
-        console.log('ERROR OCCURRED, ', e);
-      }
+        client
+          .query(q.Get(q.Ref(q.Collection('products'), 1)))
+          .then(result1 => {
+            if (result1) {
+              console.log('result1! ', result1);
+            } else {
+              console.log('no result1 ', result1);
+            }
+          });
+      } catch (e) {}
     }
   } else {
     console.log('NO MATCH');
@@ -57,4 +54,4 @@ export async function handler(event, context, callback) {
       statusCode: 403,
     });
   }
-}
+};
