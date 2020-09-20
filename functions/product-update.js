@@ -34,6 +34,9 @@ exports.handler = function (event, context, callback) {
             } else {
               console.log('no result ', result);
             }
+          })
+          .catch(() => {
+            console.log('result rejection');
           });
 
         client
@@ -44,6 +47,9 @@ exports.handler = function (event, context, callback) {
             } else {
               console.log('no result1 ', result1);
             }
+          })
+          .catch(() => {
+            console.log('result 1 rejection');
           });
       } catch (e) {}
     }
