@@ -16,10 +16,12 @@ exports.handler = function (event, context, callback) {
   // Compare our hash to Shopify's hash
   if (hash === hmac) {
     // It's a match! All good
+    console.log('MATCH');
     callback(null, {
       statusCode: 200,
     });
   } else {
+    console.log('NO MATCH');
     // No match! This request didn't originate from Shopify
     callback(null, {
       statusCode: 403,
