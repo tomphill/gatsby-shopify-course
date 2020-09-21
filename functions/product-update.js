@@ -38,7 +38,7 @@ exports.handler = function (event, context, callback) {
               // update record
               client
                 .query(
-                  q.Update(q.Ref(q.Collection('products'), id), {
+                  q.Update(q.Match(q.Index('product_by_id'), id), {
                     data: { product: bodyString },
                   })
                 )
