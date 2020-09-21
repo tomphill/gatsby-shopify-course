@@ -27,7 +27,7 @@ exports.handler = function (event, context, callback) {
         console.log(body);
         const { id } = body;
         client
-          .query(q.Get(q.Ref(q.Collection('products'), id)))
+          .query(q.Get(q.Match(q.Index('product_by_id'), id)))
           .then(result => {
             if (result) {
               console.log('result! ', result);
@@ -40,7 +40,7 @@ exports.handler = function (event, context, callback) {
           });
 
         client
-          .query(q.Get(q.Ref(q.Collection('products'), 1)))
+          .query(q.Get(q.Match(q.Index('product_by_id'), 1)))
           .then(result1 => {
             if (result1) {
               console.log('result1! ', result1);
