@@ -44,6 +44,9 @@ exports.handler = function (event, context, callback) {
                 )
                 .then(() => {
                   // call rebuild
+                })
+                .catch(e => {
+                  console.log('error updating record: ', e);
                 });
             }
           })
@@ -57,6 +60,9 @@ exports.handler = function (event, context, callback) {
               )
               .then(() => {
                 // call rebuild
+              })
+              .catch(e => {
+                console.log('error adding to db: ', e);
               });
           });
       } catch (e) {}
