@@ -51,7 +51,7 @@ exports.handler = function (event, context, callback) {
             // add to db
             client
               .query(
-                q.Create(q.Collection('posts'), {
+                q.Create(q.Collection('products'), {
                   data: { id, product: bodyString },
                 })
               )
