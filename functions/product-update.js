@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const faunadb = require('faunadb');
+const axios = require('axios');
 
 const q = faunadb.query;
 const client = new faunadb.Client({
@@ -44,6 +45,9 @@ exports.handler = function (event, context, callback) {
                 )
                 .then(() => {
                   // call rebuild
+                  axios.post(
+                    `https://api.netlify.com/build_hooks/5f40d35b9b9039da3bd19563`
+                  );
                 })
                 .catch(e => {
                   console.log('error updating record: ', e);
@@ -60,6 +64,9 @@ exports.handler = function (event, context, callback) {
               )
               .then(() => {
                 // call rebuild
+                axios.post(
+                  `https://api.netlify.com/build_hooks/5f40d35b9b9039da3bd19563`
+                );
               })
               .catch(e => {
                 console.log('error adding to db: ', e);
