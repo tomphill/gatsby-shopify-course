@@ -9,6 +9,7 @@ module.exports = {
     author: `@tomphill`,
   },
   plugins: [
+    `gatsby-plugin-remove-fingerprints`,
     `gatsby-plugin-styled-components`,
     `gatsby-optional-chaining`,
     {
