@@ -14,7 +14,5 @@ export function Logo() {
       }
     }
   `);
-
-  console.log(data);
   return <Img fixed={data.file.childImageSharp.fixed} />;
 }
