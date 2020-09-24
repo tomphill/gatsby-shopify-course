@@ -1,7 +1,6 @@
-const crypto = require('crypto');
 const faunadb = require('faunadb');
-const axios = require('axios');
 const verifyWebhookIntegrity = require('shopify-verify-webhook');
+const axios = require('axios');
 
 const q = faunadb.query;
 const client = new faunadb.Client({
@@ -16,67 +15,55 @@ exports.handler = function (event, context, callback) {
   );
 
   if (isValid) {
-    // check against db
-    if (event.body) {
-      try {
-        const body = JSON.parse(event.body);
-        const { id } = body;
-        // remove all updated dates and inventory fields
-        delete body.updated_at;
-        body.variants.forEach((v, i) => {
-          delete v.updated_at;
-          delete v.inventory_quantity;
-          delete v.old_inventory_quantity;
-        });
+    const body = JSON.parse(event.body);
+    const { id } = body;
+    delete body.updated_at;
+    body.variants.forEach(variant => {
+      delete variant.updated_at;
+      delete variant.inventory_quantity;
+      delete variant.old_inventory_quantity;
+    });
 
-        const bodyString = JSON.stringify(body);
+    const bodyString = JSON.stringify(body);
 
-        client
-          .query(q.Get(q.Match(q.Index('product_by_id'), id)))
-          .then(result => {
-            if (result.data.product !== bodyString) {
-              // update record
-              client
-                .query(
-                  q.Update(result.ref, {
-                    data: { product: bodyString },
-                  })
-                )
-                .then(() => {
-                  // call rebuild
-                  axios.post(
-                    `https://api.netlify.com/build_hooks/5f40d35b9b9039da3bd19563`
-                  );
-                })
-                .catch(e => {
-                  console.log('error updating record: ', e);
-                });
-            }
-          })
-          .catch(() => {
-            // add to db
-            client
-              .query(
-                q.Create(q.Collection('products'), {
-                  data: { id, product: bodyString },
-                })
-              )
-              .then(() => {
-                // call rebuild
-                axios.post(
-                  `https://api.netlify.com/build_hooks/5f40d35b9b9039da3bd19563`
-                );
+    client
+      .query(q.Get(q.Match(q.Index('product_by_id', id))))
+      .then(result => {
+        if (result.data.product !== bodyString) {
+          client
+            .query(
+              q.Update(result.ref, {
+                data: { product: bodyString },
               })
-              .catch(e => {
-                console.log('error adding to db: ', e);
-              });
+            )
+            .then(() => {
+              // call rebuild
+              axios.post(process.env.NETLIFY_BUILD_URL);
+            })
+            .catch(e => {
+              console.log('error updating product: ', e);
+            });
+        }
+      })
+      .catch(() => {
+        client
+          .query(
+            q.Create(q.Collection('products'), {
+              data: { id, product: bodyString },
+            })
+          )
+          .then(() => {
+            // call rebuild
+            axios.post(process.env.NETLIFY_BUILD_URL);
+          })
+          .catch(e => {
+            console.log('error adding to db: ', e);
           });
-      } catch (e) {}
-    }
+      });
   } else {
-    // This request didn't originate from Shopify
     callback(null, {
       statusCode: 403,
+      body: 'Error',
     });
   }
 };
