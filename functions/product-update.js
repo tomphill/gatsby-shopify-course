@@ -27,7 +27,7 @@ exports.handler = function (event, context, callback) {
     const bodyString = JSON.stringify(body);
 
     client
-      .query(q.Get(q.Match(q.Index('product_by_id', id))))
+      .query(q.Get(q.Match(q.Index('product_by_id'), id)))
       .then(result => {
         if (result.data.product !== bodyString) {
           client
